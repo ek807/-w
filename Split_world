@@ -1,0 +1,21 @@
+import pandas as pd
+
+# 读取.xlsx文件的前两列
+# 注意文件名应替换成你的实际文件名
+df = pd.read_excel('world.xlsx', usecols=[0, 1])
+
+# 计算数据的分割位置
+num_rows = len(df)
+split_size = 998
+
+# 分割数据
+chunks = []
+for i in range(4):
+    chunks.append(df[i * split_size: (i + 1) * split_size])  # 前四份1000条
+chunks.append(df[4 * split_size: num_rows])  # 最后一份562条
+
+# 保存每个分块为新的文件
+for idx, chunk in enumerate(chunks):
+    chunk.to_excel(f'output_part_{idx + 1}.xlsx', index=False)
+
+print("文件已成功分割！")
